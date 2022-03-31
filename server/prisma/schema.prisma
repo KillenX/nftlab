@@ -73,3 +73,11 @@ model Metadatum {
   updatedAt       DateTime    @updatedAt
   youTubeUrl      String?
 }
+
+model Test {
+  createdAt     DateTime  @default(now())
+  id            String    @id @default(cuid())
+  sljedeca      DateTime?
+  updatedAt     DateTime  @updatedAt
+  whateverField Int?
+}
