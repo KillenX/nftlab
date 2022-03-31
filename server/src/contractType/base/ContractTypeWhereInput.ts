@@ -11,11 +11,24 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { StringFilter } from "../../util/StringFilter";
+import { ContractListRelationFilter } from "../../contract/base/ContractListRelationFilter";
+import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { StringFilter } from "../../util/StringFilter";
 @InputType()
 class ContractTypeWhereInput {
+  @ApiProperty({
+    required: false,
+    type: () => ContractListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => ContractListRelationFilter)
+  @IsOptional()
+  @Field(() => ContractListRelationFilter, {
+    nullable: true,
+  })
+  contracts?: ContractListRelationFilter;
+
   @ApiProperty({
     required: false,
     type: StringFilter,

@@ -73,13 +73,32 @@ export class ContractControllerBase {
       );
     }
     return await this.service.create({
-      data: data,
+      data: {
+        ...data,
+
+        contractType: {
+          connect: data.contractType,
+        },
+      },
       select: {
         address: true,
+
+        contractType: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
+        description: true,
+        externalLink: true,
+        feeRecipient: true,
         id: true,
+        image: true,
         name: true,
+        sellerFeeBasisPoints: true,
         updatedAt: true,
+        uri: true,
       },
     });
   }
@@ -114,10 +133,23 @@ export class ContractControllerBase {
       ...args,
       select: {
         address: true,
+
+        contractType: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
+        description: true,
+        externalLink: true,
+        feeRecipient: true,
         id: true,
+        image: true,
         name: true,
+        sellerFeeBasisPoints: true,
         updatedAt: true,
+        uri: true,
       },
     });
     return results.map((result) => permission.filter(result));
@@ -151,10 +183,23 @@ export class ContractControllerBase {
       where: params,
       select: {
         address: true,
+
+        contractType: {
+          select: {
+            id: true,
+          },
+        },
+
         createdAt: true,
+        description: true,
+        externalLink: true,
+        feeRecipient: true,
         id: true,
+        image: true,
         name: true,
+        sellerFeeBasisPoints: true,
         updatedAt: true,
+        uri: true,
       },
     });
     if (result === null) {
@@ -206,13 +251,32 @@ export class ContractControllerBase {
     try {
       return await this.service.update({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          contractType: {
+            connect: data.contractType,
+          },
+        },
         select: {
           address: true,
+
+          contractType: {
+            select: {
+              id: true,
+            },
+          },
+
           createdAt: true,
+          description: true,
+          externalLink: true,
+          feeRecipient: true,
           id: true,
+          image: true,
           name: true,
+          sellerFeeBasisPoints: true,
           updatedAt: true,
+          uri: true,
         },
       });
     } catch (error) {
@@ -247,10 +311,23 @@ export class ContractControllerBase {
         where: params,
         select: {
           address: true,
+
+          contractType: {
+            select: {
+              id: true,
+            },
+          },
+
           createdAt: true,
+          description: true,
+          externalLink: true,
+          feeRecipient: true,
           id: true,
+          image: true,
           name: true,
+          sellerFeeBasisPoints: true,
           updatedAt: true,
+          uri: true,
         },
       });
     } catch (error) {

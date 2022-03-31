@@ -1,5 +1,5 @@
 {
-  "name": "@my-app/server",
+  "name": "@nft-lab/server",
   "private": true,
   "scripts": {
     "start": "nest start",

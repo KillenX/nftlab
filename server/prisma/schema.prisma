@@ -30,20 +30,31 @@ model Attribute {
 }
 
 model Contract {
-  address   String   @unique
-  createdAt DateTime @default(now())
-  id        String   @id @default(cuid())
-  name      String?
-  nfts      Nft[]
-  updatedAt DateTime @updatedAt
+  address              String       @unique
+  contractType         ContractType @relation(fields: [contractTypeId], references: [id])
+  contractTypeId       String
+  createdAt            DateTime     @default(now())
+  description          String?
+  externalLink         String?
+  feeRecipient         String?
+  id                   String       @id @default(cuid())
+  image                String?
+  name                 String?
+  nfts                 Nft[]
+  sellerFeeBasisPoints Int?
+  updatedAt            DateTime     @updatedAt
+  uri                  String?
 }
 
 model Collection {
-  createdAt DateTime @default(now())
-  id        String   @id @default(cuid())
-  name      String   @unique
-  nfts      Nft[]
-  updatedAt DateTime @updatedAt
+  bannerImageUrl String?
+  createdAt      DateTime @default(now())
+  description    String?
+  id             String   @id @default(cuid())
+  imageUrl       String?
+  name           String   @unique
+  nfts           Nft[]
+  updatedAt      DateTime @updatedAt
 }
 
 model Nft {
@@ -75,8 +86,9 @@ model Metadatum {
 }
 
 model ContractType {
-  createdAt     DateTime @default(now())
-  id            String   @id @default(cuid())
+  contracts     Contract[]
+  createdAt     DateTime   @default(now())
+  id            String     @id @default(cuid())
   tokenStandard String
-  updatedAt     DateTime @updatedAt
+  updatedAt     DateTime   @updatedAt
 }

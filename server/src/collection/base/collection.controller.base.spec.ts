@@ -11,28 +11,40 @@ import { CollectionService } from "../collection.service";
 const nonExistingId = "nonExistingId";
 const existingId = "existingId";
 const CREATE_INPUT = {
+  bannerImageUrl: "exampleBannerImageUrl",
   createdAt: new Date(),
+  description: "exampleDescription",
   id: "exampleId",
+  imageUrl: "exampleImageUrl",
   name: "exampleName",
   updatedAt: new Date(),
 };
 const CREATE_RESULT = {
+  bannerImageUrl: "exampleBannerImageUrl",
   createdAt: new Date(),
+  description: "exampleDescription",
   id: "exampleId",
+  imageUrl: "exampleImageUrl",
   name: "exampleName",
   updatedAt: new Date(),
 };
 const FIND_MANY_RESULT = [
   {
+    bannerImageUrl: "exampleBannerImageUrl",
     createdAt: new Date(),
+    description: "exampleDescription",
     id: "exampleId",
+    imageUrl: "exampleImageUrl",
     name: "exampleName",
     updatedAt: new Date(),
   },
 ];
 const FIND_ONE_RESULT = {
+  bannerImageUrl: "exampleBannerImageUrl",
   createdAt: new Date(),
+  description: "exampleDescription",
   id: "exampleId",
+  imageUrl: "exampleImageUrl",
   name: "exampleName",
   updatedAt: new Date(),
 };
