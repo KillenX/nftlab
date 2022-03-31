@@ -5,6 +5,7 @@ import { ContractModule } from "./contract/contract.module";
 import { CollectionModule } from "./collection/collection.module";
 import { NftModule } from "./nft/nft.module";
 import { MetadatumModule } from "./metadatum/metadatum.module";
+import { TestModule } from "./test/test.module";
 import { ACLModule } from "./auth/acl.module";
 import { AuthModule } from "./auth/auth.module";
 import { HealthModule } from "./health/health.module";
@@ -24,6 +25,7 @@ import { GraphQLModule } from "@nestjs/graphql";
     CollectionModule,
     NftModule,
     MetadatumModule,
+    TestModule,
     ACLModule,
     AuthModule,
     HealthModule,
