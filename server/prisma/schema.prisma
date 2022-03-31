@@ -1,0 +1,75 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  createdAt DateTime @default(now())
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     String[]
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+model Attribute {
+  createdAt   DateTime   @default(now())
+  displayType String?
+  id          String     @id @default(cuid())
+  metadatum   Metadatum? @relation(fields: [metadatumId], references: [id])
+  metadatumId String?
+  traitType   String
+  updatedAt   DateTime   @updatedAt
+  value       String
+}
+
+model Contract {
+  address     String       @unique
+  collections Collection[]
+  createdAt   DateTime     @default(now())
+  id          String       @id @default(cuid())
+  name        String?
+  nfts        Nft[]
+  updatedAt   DateTime     @updatedAt
+}
+
+model Collection {
+  contract   Contract? @relation(fields: [contractId], references: [id])
+  contractId String?
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid())
+  name       String    @unique
+  updatedAt  DateTime  @updatedAt
+}
+
+model Nft {
+  contract    Contract   @relation(fields: [contractId], references: [id])
+  contractId  String
+  createdAt   DateTime   @default(now())
+  id          String     @id @default(cuid())
+  metadatum   Metadatum? @relation(fields: [metadatumId], references: [id])
+  metadatumId String?
+  tokenId     String?    @unique
+  updatedAt   DateTime   @updatedAt
+}
+
+model Metadatum {
+  animationUrl    String?
+  attributes      Attribute[]
+  backgroundColor String?
+  createdAt       DateTime    @default(now())
+  description     String?
+  externalUrl     String?
+  id              String      @id @default(cuid())
+  image           String?
+  name            String?
+  nfts            Nft[]
+  updatedAt       DateTime    @updatedAt
+  youTubeUrl      String?
+}
