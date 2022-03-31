@@ -11,9 +11,10 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, ValidateNested } from "class-validator";
-import { NftCreateNestedManyWithoutContractsInput } from "./NftCreateNestedManyWithoutContractsInput";
+import { IsString, ValidateNested, IsOptional, IsInt } from "class-validator";
+import { ContractTypeWhereUniqueInput } from "../../contractType/base/ContractTypeWhereUniqueInput";
 import { Type } from "class-transformer";
+import { NftCreateNestedManyWithoutContractsInput } from "./NftCreateNestedManyWithoutContractsInput";
 @InputType()
 class ContractCreateInput {
   @ApiProperty({
@@ -23,6 +24,59 @@ class ContractCreateInput {
   @IsString()
   @Field(() => String)
   address!: string;
+
+  @ApiProperty({
+    required: true,
+    type: () => ContractTypeWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => ContractTypeWhereUniqueInput)
+  @Field(() => ContractTypeWhereUniqueInput)
+  contractType!: ContractTypeWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  description?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  externalLink?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  feeRecipient?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  image?: string | null;
 
   @ApiProperty({
     required: false,
@@ -46,5 +100,27 @@ class ContractCreateInput {
     nullable: true,
   })
   nfts?: NftCreateNestedManyWithoutContractsInput;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsInt()
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  sellerFeeBasisPoints?: number | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  uri?: string | null;
 }
 export { ContractCreateInput };

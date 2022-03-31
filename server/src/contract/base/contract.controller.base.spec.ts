@@ -13,32 +13,56 @@ const existingId = "existingId";
 const CREATE_INPUT = {
   address: "exampleAddress",
   createdAt: new Date(),
+  description: "exampleDescription",
+  externalLink: "exampleExternalLink",
+  feeRecipient: "exampleFeeRecipient",
   id: "exampleId",
+  image: "exampleImage",
   name: "exampleName",
+  sellerFeeBasisPoints: 42,
   updatedAt: new Date(),
+  uri: "exampleUri",
 };
 const CREATE_RESULT = {
   address: "exampleAddress",
   createdAt: new Date(),
+  description: "exampleDescription",
+  externalLink: "exampleExternalLink",
+  feeRecipient: "exampleFeeRecipient",
   id: "exampleId",
+  image: "exampleImage",
   name: "exampleName",
+  sellerFeeBasisPoints: 42,
   updatedAt: new Date(),
+  uri: "exampleUri",
 };
 const FIND_MANY_RESULT = [
   {
     address: "exampleAddress",
     createdAt: new Date(),
+    description: "exampleDescription",
+    externalLink: "exampleExternalLink",
+    feeRecipient: "exampleFeeRecipient",
     id: "exampleId",
+    image: "exampleImage",
     name: "exampleName",
+    sellerFeeBasisPoints: 42,
     updatedAt: new Date(),
+    uri: "exampleUri",
   },
 ];
 const FIND_ONE_RESULT = {
   address: "exampleAddress",
   createdAt: new Date(),
+  description: "exampleDescription",
+  externalLink: "exampleExternalLink",
+  feeRecipient: "exampleFeeRecipient",
   id: "exampleId",
+  image: "exampleImage",
   name: "exampleName",
+  sellerFeeBasisPoints: 42,
   updatedAt: new Date(),
+  uri: "exampleUri",
 };
 
 const service = {

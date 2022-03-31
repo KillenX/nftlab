@@ -27,6 +27,7 @@ import { ContractFindUniqueArgs } from "./ContractFindUniqueArgs";
 import { Contract } from "./Contract";
 import { NftFindManyArgs } from "../../nft/base/NftFindManyArgs";
 import { Nft } from "../../nft/base/Nft";
+import { ContractType } from "../../contractType/base/ContractType";
 import { ContractService } from "../contract.service";
 
 @graphql.Resolver(() => Contract)
@@ -133,7 +134,13 @@ export class ContractResolverBase {
     // @ts-ignore
     return await this.service.create({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        contractType: {
+          connect: args.data.contractType,
+        },
+      },
     });
   }
 
@@ -172,7 +179,13 @@ export class ContractResolverBase {
       // @ts-ignore
       return await this.service.update({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          contractType: {
+            connect: args.data.contractType,
+          },
+        },
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -230,5 +243,29 @@ export class ContractResolverBase {
     }
 
     return results.map((result) => permission.filter(result));
+  }
+
+  @graphql.ResolveField(() => ContractType, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "Contract",
+    action: "read",
+    possession: "any",
+  })
+  async contractType(
+    @graphql.Parent() parent: Contract,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<ContractType | null> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "ContractType",
+    });
+    const result = await this.service.getContractType(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return permission.filter(result);
   }
 }

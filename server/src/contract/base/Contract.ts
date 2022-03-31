@@ -11,7 +11,14 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsDate, IsOptional, ValidateNested } from "class-validator";
+import {
+  IsString,
+  ValidateNested,
+  IsDate,
+  IsOptional,
+  IsInt,
+} from "class-validator";
+import { ContractType } from "../../contractType/base/ContractType";
 import { Type } from "class-transformer";
 import { Nft } from "../../nft/base/Nft";
 @ObjectType()
@@ -26,11 +33,52 @@ class Contract {
 
   @ApiProperty({
     required: true,
+    type: () => ContractType,
+  })
+  @ValidateNested()
+  @Type(() => ContractType)
+  contractType?: ContractType;
+
+  @ApiProperty({
+    required: true,
   })
   @IsDate()
   @Type(() => Date)
   @Field(() => Date)
   createdAt!: Date;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  description!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  externalLink!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  feeRecipient!: string | null;
 
   @ApiProperty({
     required: true,
@@ -39,6 +87,17 @@ class Contract {
   @IsString()
   @Field(() => String)
   id!: string;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  image!: string | null;
 
   @ApiProperty({
     required: false,
@@ -61,11 +120,33 @@ class Contract {
   nfts?: Array<Nft>;
 
   @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsInt()
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  sellerFeeBasisPoints!: number | null;
+
+  @ApiProperty({
     required: true,
   })
   @IsDate()
   @Type(() => Date)
   @Field(() => Date)
   updatedAt!: Date;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  uri!: string | null;
 }
 export { Contract };

@@ -25,6 +25,8 @@ import { DeleteContractTypeArgs } from "./DeleteContractTypeArgs";
 import { ContractTypeFindManyArgs } from "./ContractTypeFindManyArgs";
 import { ContractTypeFindUniqueArgs } from "./ContractTypeFindUniqueArgs";
 import { ContractType } from "./ContractType";
+import { ContractFindManyArgs } from "../../contract/base/ContractFindManyArgs";
+import { Contract } from "../../contract/base/Contract";
 import { ContractTypeService } from "../contractType.service";
 
 @graphql.Resolver(() => ContractType)
@@ -202,5 +204,31 @@ export class ContractTypeResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => [Contract])
+  @nestAccessControl.UseRoles({
+    resource: "ContractType",
+    action: "read",
+    possession: "any",
+  })
+  async contracts(
+    @graphql.Parent() parent: ContractType,
+    @graphql.Args() args: ContractFindManyArgs,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<Contract[]> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Contract",
+    });
+    const results = await this.service.findContracts(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results.map((result) => permission.filter(result));
   }
 }

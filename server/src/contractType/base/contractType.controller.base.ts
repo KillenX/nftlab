@@ -27,6 +27,9 @@ import { ContractTypeWhereUniqueInput } from "./ContractTypeWhereUniqueInput";
 import { ContractTypeFindManyArgs } from "./ContractTypeFindManyArgs";
 import { ContractTypeUpdateInput } from "./ContractTypeUpdateInput";
 import { ContractType } from "./ContractType";
+import { ContractFindManyArgs } from "../../contract/base/ContractFindManyArgs";
+import { Contract } from "../../contract/base/Contract";
+import { ContractWhereUniqueInput } from "../../contract/base/ContractWhereUniqueInput";
 @swagger.ApiBearerAuth()
 export class ContractTypeControllerBase {
   constructor(
@@ -253,5 +256,195 @@ export class ContractTypeControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Get("/:id/contracts")
+  @nestAccessControl.UseRoles({
+    resource: "ContractType",
+    action: "read",
+    possession: "any",
+  })
+  @ApiNestedQuery(ContractFindManyArgs)
+  async findManyContracts(
+    @common.Req() request: Request,
+    @common.Param() params: ContractTypeWhereUniqueInput,
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<Contract[]> {
+    const query = plainToClass(ContractFindManyArgs, request.query);
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Contract",
+    });
+    const results = await this.service.findContracts(params.id, {
+      ...query,
+      select: {
+        address: true,
+
+        contractType: {
+          select: {
+            id: true,
+          },
+        },
+
+        createdAt: true,
+        description: true,
+        externalLink: true,
+        feeRecipient: true,
+        id: true,
+        image: true,
+        name: true,
+        sellerFeeBasisPoints: true,
+        updatedAt: true,
+        uri: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results.map((result) => permission.filter(result));
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Post("/:id/contracts")
+  @nestAccessControl.UseRoles({
+    resource: "ContractType",
+    action: "update",
+    possession: "any",
+  })
+  async createContracts(
+    @common.Param() params: ContractTypeWhereUniqueInput,
+    @common.Body() body: ContractTypeWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      contracts: {
+        connect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "ContractType",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"ContractType"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Patch("/:id/contracts")
+  @nestAccessControl.UseRoles({
+    resource: "ContractType",
+    action: "update",
+    possession: "any",
+  })
+  async updateContracts(
+    @common.Param() params: ContractTypeWhereUniqueInput,
+    @common.Body() body: ContractWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      contracts: {
+        set: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "ContractType",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"ContractType"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Delete("/:id/contracts")
+  @nestAccessControl.UseRoles({
+    resource: "ContractType",
+    action: "update",
+    possession: "any",
+  })
+  async deleteContracts(
+    @common.Param() params: ContractTypeWhereUniqueInput,
+    @common.Body() body: ContractTypeWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      contracts: {
+        disconnect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "ContractType",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"ContractType"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

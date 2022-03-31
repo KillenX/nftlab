@@ -75,8 +75,11 @@ export class CollectionControllerBase {
     return await this.service.create({
       data: data,
       select: {
+        bannerImageUrl: true,
         createdAt: true,
+        description: true,
         id: true,
+        imageUrl: true,
         name: true,
         updatedAt: true,
       },
@@ -112,8 +115,11 @@ export class CollectionControllerBase {
     const results = await this.service.findMany({
       ...args,
       select: {
+        bannerImageUrl: true,
         createdAt: true,
+        description: true,
         id: true,
+        imageUrl: true,
         name: true,
         updatedAt: true,
       },
@@ -148,8 +154,11 @@ export class CollectionControllerBase {
     const result = await this.service.findOne({
       where: params,
       select: {
+        bannerImageUrl: true,
         createdAt: true,
+        description: true,
         id: true,
+        imageUrl: true,
         name: true,
         updatedAt: true,
       },
@@ -205,8 +214,11 @@ export class CollectionControllerBase {
         where: params,
         data: data,
         select: {
+          bannerImageUrl: true,
           createdAt: true,
+          description: true,
           id: true,
+          imageUrl: true,
           name: true,
           updatedAt: true,
         },
@@ -242,8 +254,11 @@ export class CollectionControllerBase {
       return await this.service.delete({
         where: params,
         select: {
+          bannerImageUrl: true,
           createdAt: true,
+          description: true,
           id: true,
+          imageUrl: true,
           name: true,
           updatedAt: true,
         },

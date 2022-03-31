@@ -10,7 +10,7 @@ https://docs.amplication.com/docs/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "nestjs-prisma";
-import { Prisma, ContractType } from "@prisma/client";
+import { Prisma, ContractType, Contract } from "@prisma/client";
 
 export class ContractTypeServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -45,5 +45,16 @@ export class ContractTypeServiceBase {
     args: Prisma.SelectSubset<T, Prisma.ContractTypeDeleteArgs>
   ): Promise<ContractType> {
     return this.prisma.contractType.delete(args);
+  }
+
+  async findContracts(
+    parentId: string,
+    args: Prisma.ContractFindManyArgs
+  ): Promise<Contract[]> {
+    return this.prisma.contractType
+      .findUnique({
+        where: { id: parentId },
+      })
+      .contracts(args);
   }
 }

@@ -25,6 +25,15 @@ class CollectionOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
+  bannerImageUrl?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
   createdAt?: SortOrder;
 
   @ApiProperty({
@@ -34,7 +43,25 @@ class CollectionOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
+  description?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
   id?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
+  imageUrl?: SortOrder;
 
   @ApiProperty({
     required: false,

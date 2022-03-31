@@ -11,11 +11,44 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, ValidateNested, IsOptional } from "class-validator";
+import { IsString, IsOptional, ValidateNested } from "class-validator";
 import { NftCreateNestedManyWithoutCollectionsInput } from "./NftCreateNestedManyWithoutCollectionsInput";
 import { Type } from "class-transformer";
 @InputType()
 class CollectionCreateInput {
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  bannerImageUrl?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  description?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  imageUrl?: string | null;
+
   @ApiProperty({
     required: true,
     type: String,

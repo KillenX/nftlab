@@ -11,9 +11,23 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional } from "class-validator";
+import { ContractUpdateManyWithoutContractTypesInput } from "./ContractUpdateManyWithoutContractTypesInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
 @InputType()
 class ContractTypeUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => ContractUpdateManyWithoutContractTypesInput,
+  })
+  @ValidateNested()
+  @Type(() => ContractUpdateManyWithoutContractTypesInput)
+  @IsOptional()
+  @Field(() => ContractUpdateManyWithoutContractTypesInput, {
+    nullable: true,
+  })
+  contracts?: ContractUpdateManyWithoutContractTypesInput;
+
   @ApiProperty({
     required: false,
     type: String,

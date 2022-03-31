@@ -15,6 +15,9 @@ export const CollectionEdit = (props: EditProps): React.ReactElement => {
   return (
     <Edit {...props}>
       <SimpleForm>
+        <TextInput label="Banner image URL" source="bannerImageUrl" />
+        <TextInput label="Description" multiline source="description" />
+        <TextInput label="Image URL" source="imageUrl" />
         <TextInput label="Name" source="name" />
         <ReferenceArrayInput
           source="nfts"
