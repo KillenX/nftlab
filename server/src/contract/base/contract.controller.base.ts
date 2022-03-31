@@ -27,9 +27,6 @@ import { ContractWhereUniqueInput } from "./ContractWhereUniqueInput";
 import { ContractFindManyArgs } from "./ContractFindManyArgs";
 import { ContractUpdateInput } from "./ContractUpdateInput";
 import { Contract } from "./Contract";
-import { CollectionFindManyArgs } from "../../collection/base/CollectionFindManyArgs";
-import { Collection } from "../../collection/base/Collection";
-import { CollectionWhereUniqueInput } from "../../collection/base/CollectionWhereUniqueInput";
 import { NftFindManyArgs } from "../../nft/base/NftFindManyArgs";
 import { Nft } from "../../nft/base/Nft";
 import { NftWhereUniqueInput } from "../../nft/base/NftWhereUniqueInput";
@@ -271,188 +268,6 @@ export class ContractControllerBase {
     defaultAuthGuard.DefaultAuthGuard,
     nestAccessControl.ACGuard
   )
-  @common.Get("/:id/collections")
-  @nestAccessControl.UseRoles({
-    resource: "Contract",
-    action: "read",
-    possession: "any",
-  })
-  @ApiNestedQuery(CollectionFindManyArgs)
-  async findManyCollections(
-    @common.Req() request: Request,
-    @common.Param() params: ContractWhereUniqueInput,
-    @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<Collection[]> {
-    const query = plainToClass(CollectionFindManyArgs, request.query);
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "read",
-      possession: "any",
-      resource: "Collection",
-    });
-    const results = await this.service.findCollections(params.id, {
-      ...query,
-      select: {
-        contract: {
-          select: {
-            id: true,
-          },
-        },
-
-        createdAt: true,
-        id: true,
-        name: true,
-        updatedAt: true,
-      },
-    });
-    if (results === null) {
-      throw new errors.NotFoundException(
-        `No resource was found for ${JSON.stringify(params)}`
-      );
-    }
-    return results.map((result) => permission.filter(result));
-  }
-
-  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
-  @common.UseGuards(
-    defaultAuthGuard.DefaultAuthGuard,
-    nestAccessControl.ACGuard
-  )
-  @common.Post("/:id/collections")
-  @nestAccessControl.UseRoles({
-    resource: "Contract",
-    action: "update",
-    possession: "any",
-  })
-  async createCollections(
-    @common.Param() params: ContractWhereUniqueInput,
-    @common.Body() body: ContractWhereUniqueInput[],
-    @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<void> {
-    const data = {
-      collections: {
-        connect: body,
-      },
-    };
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "update",
-      possession: "any",
-      resource: "Contract",
-    });
-    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
-    if (invalidAttributes.length) {
-      const roles = userRoles
-        .map((role: string) => JSON.stringify(role))
-        .join(",");
-      throw new common.ForbiddenException(
-        `Updating the relationship: ${
-          invalidAttributes[0]
-        } of ${"Contract"} is forbidden for roles: ${roles}`
-      );
-    }
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
-  @common.UseGuards(
-    defaultAuthGuard.DefaultAuthGuard,
-    nestAccessControl.ACGuard
-  )
-  @common.Patch("/:id/collections")
-  @nestAccessControl.UseRoles({
-    resource: "Contract",
-    action: "update",
-    possession: "any",
-  })
-  async updateCollections(
-    @common.Param() params: ContractWhereUniqueInput,
-    @common.Body() body: CollectionWhereUniqueInput[],
-    @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<void> {
-    const data = {
-      collections: {
-        set: body,
-      },
-    };
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "update",
-      possession: "any",
-      resource: "Contract",
-    });
-    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
-    if (invalidAttributes.length) {
-      const roles = userRoles
-        .map((role: string) => JSON.stringify(role))
-        .join(",");
-      throw new common.ForbiddenException(
-        `Updating the relationship: ${
-          invalidAttributes[0]
-        } of ${"Contract"} is forbidden for roles: ${roles}`
-      );
-    }
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
-  @common.UseGuards(
-    defaultAuthGuard.DefaultAuthGuard,
-    nestAccessControl.ACGuard
-  )
-  @common.Delete("/:id/collections")
-  @nestAccessControl.UseRoles({
-    resource: "Contract",
-    action: "update",
-    possession: "any",
-  })
-  async deleteCollections(
-    @common.Param() params: ContractWhereUniqueInput,
-    @common.Body() body: ContractWhereUniqueInput[],
-    @nestAccessControl.UserRoles() userRoles: string[]
-  ): Promise<void> {
-    const data = {
-      collections: {
-        disconnect: body,
-      },
-    };
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "update",
-      possession: "any",
-      resource: "Contract",
-    });
-    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
-    if (invalidAttributes.length) {
-      const roles = userRoles
-        .map((role: string) => JSON.stringify(role))
-        .join(",");
-      throw new common.ForbiddenException(
-        `Updating the relationship: ${
-          invalidAttributes[0]
-        } of ${"Contract"} is forbidden for roles: ${roles}`
-      );
-    }
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
-  @common.UseGuards(
-    defaultAuthGuard.DefaultAuthGuard,
-    nestAccessControl.ACGuard
-  )
   @common.Get("/:id/nfts")
   @nestAccessControl.UseRoles({
     resource: "Contract",
@@ -475,6 +290,12 @@ export class ContractControllerBase {
     const results = await this.service.findNfts(params.id, {
       ...query,
       select: {
+        collection: {
+          select: {
+            id: true,
+          },
+        },
+
         contract: {
           select: {
             id: true,

@@ -1,8 +1,8 @@
-import { ContractWhereUniqueInput } from "../contract/ContractWhereUniqueInput";
 import { StringFilter } from "../../util/StringFilter";
+import { NftListRelationFilter } from "../nft/NftListRelationFilter";
 
 export type CollectionWhereInput = {
-  contract?: ContractWhereUniqueInput;
   id?: StringFilter;
   name?: StringFilter;
+  nfts?: NftListRelationFilter;
 };
