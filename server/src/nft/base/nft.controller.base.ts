@@ -73,6 +73,12 @@ export class NftControllerBase {
       data: {
         ...data,
 
+        collection: data.collection
+          ? {
+              connect: data.collection,
+            }
+          : undefined,
+
         contract: {
           connect: data.contract,
         },
@@ -84,6 +90,12 @@ export class NftControllerBase {
           : undefined,
       },
       select: {
+        collection: {
+          select: {
+            id: true,
+          },
+        },
+
         contract: {
           select: {
             id: true,
@@ -134,6 +146,12 @@ export class NftControllerBase {
     const results = await this.service.findMany({
       ...args,
       select: {
+        collection: {
+          select: {
+            id: true,
+          },
+        },
+
         contract: {
           select: {
             id: true,
@@ -183,6 +201,12 @@ export class NftControllerBase {
     const result = await this.service.findOne({
       where: params,
       select: {
+        collection: {
+          select: {
+            id: true,
+          },
+        },
+
         contract: {
           select: {
             id: true,
@@ -254,6 +278,12 @@ export class NftControllerBase {
         data: {
           ...data,
 
+          collection: data.collection
+            ? {
+                connect: data.collection,
+              }
+            : undefined,
+
           contract: {
             connect: data.contract,
           },
@@ -265,6 +295,12 @@ export class NftControllerBase {
             : undefined,
         },
         select: {
+          collection: {
+            select: {
+              id: true,
+            },
+          },
+
           contract: {
             select: {
               id: true,
@@ -315,6 +351,12 @@ export class NftControllerBase {
       return await this.service.delete({
         where: params,
         select: {
+          collection: {
+            select: {
+              id: true,
+            },
+          },
+
           contract: {
             select: {
               id: true,

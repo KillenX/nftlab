@@ -11,10 +11,9 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, ValidateNested, IsOptional } from "class-validator";
-import { CollectionCreateNestedManyWithoutContractsInput } from "./CollectionCreateNestedManyWithoutContractsInput";
-import { Type } from "class-transformer";
+import { IsString, IsOptional, ValidateNested } from "class-validator";
 import { NftCreateNestedManyWithoutContractsInput } from "./NftCreateNestedManyWithoutContractsInput";
+import { Type } from "class-transformer";
 @InputType()
 class ContractCreateInput {
   @ApiProperty({
@@ -24,18 +23,6 @@ class ContractCreateInput {
   @IsString()
   @Field(() => String)
   address!: string;
-
-  @ApiProperty({
-    required: false,
-    type: () => CollectionCreateNestedManyWithoutContractsInput,
-  })
-  @ValidateNested()
-  @Type(() => CollectionCreateNestedManyWithoutContractsInput)
-  @IsOptional()
-  @Field(() => CollectionCreateNestedManyWithoutContractsInput, {
-    nullable: true,
-  })
-  collections?: CollectionCreateNestedManyWithoutContractsInput;
 
   @ApiProperty({
     required: false,

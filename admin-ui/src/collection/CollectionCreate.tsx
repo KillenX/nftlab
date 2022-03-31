@@ -1,26 +1,29 @@
 import * as React from "react";
+
 import {
   Create,
   SimpleForm,
   CreateProps,
-  ReferenceInput,
-  SelectInput,
   TextInput,
+  ReferenceArrayInput,
+  SelectArrayInput,
 } from "react-admin";
-import { ContractTitle } from "../contract/ContractTitle";
+
+import { NftTitle } from "../nft/NftTitle";
 
 export const CollectionCreate = (props: CreateProps): React.ReactElement => {
   return (
     <Create {...props}>
       <SimpleForm>
-        <ReferenceInput
-          source="contract.id"
-          reference="Contract"
-          label="Contract"
-        >
-          <SelectInput optionText={ContractTitle} />
-        </ReferenceInput>
         <TextInput label="Name" source="name" />
+        <ReferenceArrayInput
+          source="nfts"
+          reference="Nft"
+          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+          format={(value: any) => value && value.map((v: any) => v.id)}
+        >
+          <SelectArrayInput optionText={NftTitle} />
+        </ReferenceArrayInput>
       </SimpleForm>
     </Create>
   );

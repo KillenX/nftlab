@@ -13,7 +13,7 @@ export const AttributeEdit = (props: EditProps): React.ReactElement => {
   return (
     <Edit {...props}>
       <SimpleForm>
-        <TextInput label="display_type" source="displayType" />
+        <TextInput label="Display type" source="displayType" />
         <ReferenceInput
           source="metadatum.id"
           reference="Metadatum"
@@ -21,8 +21,8 @@ export const AttributeEdit = (props: EditProps): React.ReactElement => {
         >
           <SelectInput optionText={MetadatumTitle} />
         </ReferenceInput>
-        <TextInput label="trait_type" source="traitType" />
-        <TextInput label="value" source="value" />
+        <TextInput label="Trait type" source="traitType" />
+        <TextInput label="Value" source="value" />
       </SimpleForm>
     </Edit>
   );

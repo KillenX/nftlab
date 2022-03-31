@@ -10,7 +10,7 @@ https://docs.amplication.com/docs/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "nestjs-prisma";
-import { Prisma, Collection, Contract } from "@prisma/client";
+import { Prisma, Collection, Nft } from "@prisma/client";
 
 export class CollectionServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -47,11 +47,14 @@ export class CollectionServiceBase {
     return this.prisma.collection.delete(args);
   }
 
-  async getContract(parentId: string): Promise<Contract | null> {
+  async findNfts(
+    parentId: string,
+    args: Prisma.NftFindManyArgs
+  ): Promise<Nft[]> {
     return this.prisma.collection
       .findUnique({
         where: { id: parentId },
       })
-      .contract();
+      .nfts(args);
   }
 }
