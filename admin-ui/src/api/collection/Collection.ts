@@ -1,9 +1,9 @@
-import { Contract } from "../contract/Contract";
+import { Nft } from "../nft/Nft";
 
 export type Collection = {
-  contract?: Contract | null;
   createdAt: Date;
   id: string;
   name: string;
+  nfts?: Array<Nft>;
   updatedAt: Date;
 };

@@ -29,6 +29,10 @@ import { MetadatumList } from "./metadatum/MetadatumList";
 import { MetadatumCreate } from "./metadatum/MetadatumCreate";
 import { MetadatumEdit } from "./metadatum/MetadatumEdit";
 import { MetadatumShow } from "./metadatum/MetadatumShow";
+import { ContractTypeList } from "./contractType/ContractTypeList";
+import { ContractTypeCreate } from "./contractType/ContractTypeCreate";
+import { ContractTypeEdit } from "./contractType/ContractTypeEdit";
+import { ContractTypeShow } from "./contractType/ContractTypeShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -96,6 +100,13 @@ const App = (): React.ReactElement => {
           edit={MetadatumEdit}
           create={MetadatumCreate}
           show={MetadatumShow}
+        />
+        <Resource
+          name="ContractType"
+          list={ContractTypeList}
+          edit={ContractTypeEdit}
+          create={ContractTypeCreate}
+          show={ContractTypeShow}
         />
       </Admin>
     </div>

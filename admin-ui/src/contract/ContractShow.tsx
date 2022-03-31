@@ -11,6 +11,7 @@ import {
   ReferenceField,
 } from "react-admin";
 
+import { COLLECTION_TITLE_FIELD } from "../collection/CollectionTitle";
 import { CONTRACT_TITLE_FIELD } from "./ContractTitle";
 import { METADATUM_TITLE_FIELD } from "../metadatum/MetadatumTitle";
 
@@ -23,27 +24,15 @@ export const ContractShow = (props: ShowProps): React.ReactElement => {
         <TextField label="ID" source="id" />
         <TextField label="Name" source="name" />
         <DateField source="updatedAt" label="Updated At" />
-        <ReferenceManyField
-          reference="Collection"
-          target="ContractId"
-          label="Collections"
-        >
-          <Datagrid rowClick="show">
-            <ReferenceField
-              label="Contract"
-              source="contract.id"
-              reference="Contract"
-            >
-              <TextField source={CONTRACT_TITLE_FIELD} />
-            </ReferenceField>
-            <DateField source="createdAt" label="Created At" />
-            <TextField label="ID" source="id" />
-            <TextField label="Name" source="name" />
-            <DateField source="updatedAt" label="Updated At" />
-          </Datagrid>
-        </ReferenceManyField>
         <ReferenceManyField reference="Nft" target="ContractId" label="Nfts">
           <Datagrid rowClick="show">
+            <ReferenceField
+              label="Collection"
+              source="collection.id"
+              reference="Collection"
+            >
+              <TextField source={COLLECTION_TITLE_FIELD} />
+            </ReferenceField>
             <ReferenceField
               label="Contract"
               source="contract.id"

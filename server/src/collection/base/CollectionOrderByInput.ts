@@ -25,15 +25,6 @@ class CollectionOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  contractId?: SortOrder;
-
-  @ApiProperty({
-    required: false,
-    enum: ["asc", "desc"],
-  })
-  @Field(() => SortOrder, {
-    nullable: true,
-  })
   createdAt?: SortOrder;
 
   @ApiProperty({

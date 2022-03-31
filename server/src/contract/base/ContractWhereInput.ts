@@ -14,7 +14,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
-import { CollectionListRelationFilter } from "../../collection/base/CollectionListRelationFilter";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { NftListRelationFilter } from "../../nft/base/NftListRelationFilter";
 @InputType()
@@ -29,18 +28,6 @@ class ContractWhereInput {
     nullable: true,
   })
   address?: StringFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => CollectionListRelationFilter,
-  })
-  @ValidateNested()
-  @Type(() => CollectionListRelationFilter)
-  @IsOptional()
-  @Field(() => CollectionListRelationFilter, {
-    nullable: true,
-  })
-  collections?: CollectionListRelationFilter;
 
   @ApiProperty({
     required: false,

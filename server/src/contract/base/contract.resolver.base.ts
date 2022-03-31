@@ -25,8 +25,6 @@ import { DeleteContractArgs } from "./DeleteContractArgs";
 import { ContractFindManyArgs } from "./ContractFindManyArgs";
 import { ContractFindUniqueArgs } from "./ContractFindUniqueArgs";
 import { Contract } from "./Contract";
-import { CollectionFindManyArgs } from "../../collection/base/CollectionFindManyArgs";
-import { Collection } from "../../collection/base/Collection";
 import { NftFindManyArgs } from "../../nft/base/NftFindManyArgs";
 import { Nft } from "../../nft/base/Nft";
 import { ContractService } from "../contract.service";
@@ -206,32 +204,6 @@ export class ContractResolverBase {
       }
       throw error;
     }
-  }
-
-  @graphql.ResolveField(() => [Collection])
-  @nestAccessControl.UseRoles({
-    resource: "Contract",
-    action: "read",
-    possession: "any",
-  })
-  async collections(
-    @graphql.Parent() parent: Contract,
-    @graphql.Args() args: CollectionFindManyArgs,
-    @gqlUserRoles.UserRoles() userRoles: string[]
-  ): Promise<Collection[]> {
-    const permission = this.rolesBuilder.permission({
-      role: userRoles,
-      action: "read",
-      possession: "any",
-      resource: "Collection",
-    });
-    const results = await this.service.findCollections(parent.id, args);
-
-    if (!results) {
-      return [];
-    }
-
-    return results.map((result) => permission.filter(result));
   }
 
   @graphql.ResolveField(() => [Nft])

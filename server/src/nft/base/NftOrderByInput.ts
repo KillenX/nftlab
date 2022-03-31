@@ -25,6 +25,15 @@ class NftOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
+  collectionId?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
   contractId?: SortOrder;
 
   @ApiProperty({

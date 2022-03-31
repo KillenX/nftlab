@@ -11,23 +11,11 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { ContractWhereUniqueInput } from "../../contract/base/ContractWhereUniqueInput";
-import { ValidateNested, IsOptional, IsString } from "class-validator";
+import { IsString, IsOptional, ValidateNested } from "class-validator";
+import { NftUpdateManyWithoutCollectionsInput } from "./NftUpdateManyWithoutCollectionsInput";
 import { Type } from "class-transformer";
 @InputType()
 class CollectionUpdateInput {
-  @ApiProperty({
-    required: false,
-    type: () => ContractWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => ContractWhereUniqueInput)
-  @IsOptional()
-  @Field(() => ContractWhereUniqueInput, {
-    nullable: true,
-  })
-  contract?: ContractWhereUniqueInput | null;
-
   @ApiProperty({
     required: false,
     type: String,
@@ -38,5 +26,17 @@ class CollectionUpdateInput {
     nullable: true,
   })
   name?: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => NftUpdateManyWithoutCollectionsInput,
+  })
+  @ValidateNested()
+  @Type(() => NftUpdateManyWithoutCollectionsInput)
+  @IsOptional()
+  @Field(() => NftUpdateManyWithoutCollectionsInput, {
+    nullable: true,
+  })
+  nfts?: NftUpdateManyWithoutCollectionsInput;
 }
 export { CollectionUpdateInput };

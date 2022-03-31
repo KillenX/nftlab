@@ -25,6 +25,7 @@ import { DeleteNftArgs } from "./DeleteNftArgs";
 import { NftFindManyArgs } from "./NftFindManyArgs";
 import { NftFindUniqueArgs } from "./NftFindUniqueArgs";
 import { Nft } from "./Nft";
+import { Collection } from "../../collection/base/Collection";
 import { Contract } from "../../contract/base/Contract";
 import { Metadatum } from "../../metadatum/base/Metadatum";
 import { NftService } from "../nft.service";
@@ -136,6 +137,12 @@ export class NftResolverBase {
       data: {
         ...args.data,
 
+        collection: args.data.collection
+          ? {
+              connect: args.data.collection,
+            }
+          : undefined,
+
         contract: {
           connect: args.data.contract,
         },
@@ -187,6 +194,12 @@ export class NftResolverBase {
         data: {
           ...args.data,
 
+          collection: args.data.collection
+            ? {
+                connect: args.data.collection,
+              }
+            : undefined,
+
           contract: {
             connect: args.data.contract,
           },
@@ -226,6 +239,30 @@ export class NftResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => Collection, { nullable: true })
+  @nestAccessControl.UseRoles({
+    resource: "Nft",
+    action: "read",
+    possession: "any",
+  })
+  async collection(
+    @graphql.Parent() parent: Nft,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<Collection | null> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Collection",
+    });
+    const result = await this.service.getCollection(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return permission.filter(result);
   }
 
   @graphql.ResolveField(() => Contract, { nullable: true })

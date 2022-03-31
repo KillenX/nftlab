@@ -27,6 +27,9 @@ import { CollectionWhereUniqueInput } from "./CollectionWhereUniqueInput";
 import { CollectionFindManyArgs } from "./CollectionFindManyArgs";
 import { CollectionUpdateInput } from "./CollectionUpdateInput";
 import { Collection } from "./Collection";
+import { NftFindManyArgs } from "../../nft/base/NftFindManyArgs";
+import { Nft } from "../../nft/base/Nft";
+import { NftWhereUniqueInput } from "../../nft/base/NftWhereUniqueInput";
 @swagger.ApiBearerAuth()
 export class CollectionControllerBase {
   constructor(
@@ -70,22 +73,8 @@ export class CollectionControllerBase {
       );
     }
     return await this.service.create({
-      data: {
-        ...data,
-
-        contract: data.contract
-          ? {
-              connect: data.contract,
-            }
-          : undefined,
-      },
+      data: data,
       select: {
-        contract: {
-          select: {
-            id: true,
-          },
-        },
-
         createdAt: true,
         id: true,
         name: true,
@@ -123,12 +112,6 @@ export class CollectionControllerBase {
     const results = await this.service.findMany({
       ...args,
       select: {
-        contract: {
-          select: {
-            id: true,
-          },
-        },
-
         createdAt: true,
         id: true,
         name: true,
@@ -165,12 +148,6 @@ export class CollectionControllerBase {
     const result = await this.service.findOne({
       where: params,
       select: {
-        contract: {
-          select: {
-            id: true,
-          },
-        },
-
         createdAt: true,
         id: true,
         name: true,
@@ -226,22 +203,8 @@ export class CollectionControllerBase {
     try {
       return await this.service.update({
         where: params,
-        data: {
-          ...data,
-
-          contract: data.contract
-            ? {
-                connect: data.contract,
-              }
-            : undefined,
-        },
+        data: data,
         select: {
-          contract: {
-            select: {
-              id: true,
-            },
-          },
-
           createdAt: true,
           id: true,
           name: true,
@@ -279,12 +242,6 @@ export class CollectionControllerBase {
       return await this.service.delete({
         where: params,
         select: {
-          contract: {
-            select: {
-              id: true,
-            },
-          },
-
           createdAt: true,
           id: true,
           name: true,
@@ -299,5 +256,200 @@ export class CollectionControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Get("/:id/nfts")
+  @nestAccessControl.UseRoles({
+    resource: "Collection",
+    action: "read",
+    possession: "any",
+  })
+  @ApiNestedQuery(NftFindManyArgs)
+  async findManyNfts(
+    @common.Req() request: Request,
+    @common.Param() params: CollectionWhereUniqueInput,
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<Nft[]> {
+    const query = plainToClass(NftFindManyArgs, request.query);
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Nft",
+    });
+    const results = await this.service.findNfts(params.id, {
+      ...query,
+      select: {
+        collection: {
+          select: {
+            id: true,
+          },
+        },
+
+        contract: {
+          select: {
+            id: true,
+          },
+        },
+
+        createdAt: true,
+        id: true,
+
+        metadatum: {
+          select: {
+            id: true,
+          },
+        },
+
+        tokenId: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results.map((result) => permission.filter(result));
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Post("/:id/nfts")
+  @nestAccessControl.UseRoles({
+    resource: "Collection",
+    action: "update",
+    possession: "any",
+  })
+  async createNfts(
+    @common.Param() params: CollectionWhereUniqueInput,
+    @common.Body() body: CollectionWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      nfts: {
+        connect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Collection",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Collection"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Patch("/:id/nfts")
+  @nestAccessControl.UseRoles({
+    resource: "Collection",
+    action: "update",
+    possession: "any",
+  })
+  async updateNfts(
+    @common.Param() params: CollectionWhereUniqueInput,
+    @common.Body() body: NftWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      nfts: {
+        set: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Collection",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Collection"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Delete("/:id/nfts")
+  @nestAccessControl.UseRoles({
+    resource: "Collection",
+    action: "update",
+    possession: "any",
+  })
+  async deleteNfts(
+    @common.Param() params: CollectionWhereUniqueInput,
+    @common.Body() body: CollectionWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      nfts: {
+        disconnect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "Collection",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"Collection"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }
