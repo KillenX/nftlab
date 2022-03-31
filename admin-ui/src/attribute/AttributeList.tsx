@@ -21,7 +21,7 @@ export const AttributeList = (props: ListProps): React.ReactElement => {
     >
       <Datagrid rowClick="show">
         <DateField source="createdAt" label="Created At" />
-        <TextField label="display_type" source="displayType" />
+        <TextField label="Display type" source="displayType" />
         <TextField label="ID" source="id" />
         <ReferenceField
           label="Metadata"
@@ -30,9 +30,9 @@ export const AttributeList = (props: ListProps): React.ReactElement => {
         >
           <TextField source={METADATUM_TITLE_FIELD} />
         </ReferenceField>
-        <TextField label="trait_type" source="traitType" />
+        <TextField label="Trait type" source="traitType" />
         <DateField source="updatedAt" label="Updated At" />
-        <TextField label="value" source="value" />
+        <TextField label="Value" source="value" />
       </Datagrid>
     </List>
   );

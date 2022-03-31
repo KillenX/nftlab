@@ -7,6 +7,7 @@ import {
   SelectInput,
   TextInput,
 } from "react-admin";
+import { CollectionTitle } from "../collection/CollectionTitle";
 import { ContractTitle } from "../contract/ContractTitle";
 import { MetadatumTitle } from "../metadatum/MetadatumTitle";
 
@@ -14,6 +15,13 @@ export const NftEdit = (props: EditProps): React.ReactElement => {
   return (
     <Edit {...props}>
       <SimpleForm>
+        <ReferenceInput
+          source="collection.id"
+          reference="Collection"
+          label="Collection"
+        >
+          <SelectInput optionText={CollectionTitle} />
+        </ReferenceInput>
         <ReferenceInput
           source="contract.id"
           reference="Contract"

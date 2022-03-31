@@ -30,33 +30,33 @@ model Attribute {
 }
 
 model Contract {
-  address     String       @unique
-  collections Collection[]
-  createdAt   DateTime     @default(now())
-  id          String       @id @default(cuid())
-  name        String?
-  nfts        Nft[]
-  updatedAt   DateTime     @updatedAt
+  address   String   @unique
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  name      String?
+  nfts      Nft[]
+  updatedAt DateTime @updatedAt
 }
 
 model Collection {
-  contract   Contract? @relation(fields: [contractId], references: [id])
-  contractId String?
-  createdAt  DateTime  @default(now())
-  id         String    @id @default(cuid())
-  name       String    @unique
-  updatedAt  DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  name      String   @unique
+  nfts      Nft[]
+  updatedAt DateTime @updatedAt
 }
 
 model Nft {
-  contract    Contract   @relation(fields: [contractId], references: [id])
-  contractId  String
-  createdAt   DateTime   @default(now())
-  id          String     @id @default(cuid())
-  metadatum   Metadatum? @relation(fields: [metadatumId], references: [id])
-  metadatumId String?
-  tokenId     String?    @unique
-  updatedAt   DateTime   @updatedAt
+  collection   Collection? @relation(fields: [collectionId], references: [id])
+  collectionId String?
+  contract     Contract    @relation(fields: [contractId], references: [id])
+  contractId   String
+  createdAt    DateTime    @default(now())
+  id           String      @id @default(cuid())
+  metadatum    Metadatum?  @relation(fields: [metadatumId], references: [id])
+  metadatumId  String?
+  tokenId      String?     @unique
+  updatedAt    DateTime    @updatedAt
 }
 
 model Metadatum {
@@ -72,4 +72,11 @@ model Metadatum {
   nfts            Nft[]
   updatedAt       DateTime    @updatedAt
   youTubeUrl      String?
+}
+
+model ContractType {
+  createdAt     DateTime @default(now())
+  id            String   @id @default(cuid())
+  tokenStandard String
+  updatedAt     DateTime @updatedAt
 }

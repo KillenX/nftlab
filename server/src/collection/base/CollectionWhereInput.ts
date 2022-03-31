@@ -11,24 +11,12 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { ContractWhereUniqueInput } from "../../contract/base/ContractWhereUniqueInput";
-import { ValidateNested, IsOptional } from "class-validator";
-import { Type } from "class-transformer";
 import { StringFilter } from "../../util/StringFilter";
+import { Type } from "class-transformer";
+import { IsOptional, ValidateNested } from "class-validator";
+import { NftListRelationFilter } from "../../nft/base/NftListRelationFilter";
 @InputType()
 class CollectionWhereInput {
-  @ApiProperty({
-    required: false,
-    type: () => ContractWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => ContractWhereUniqueInput)
-  @IsOptional()
-  @Field(() => ContractWhereUniqueInput, {
-    nullable: true,
-  })
-  contract?: ContractWhereUniqueInput;
-
   @ApiProperty({
     required: false,
     type: StringFilter,
@@ -50,5 +38,17 @@ class CollectionWhereInput {
     nullable: true,
   })
   name?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => NftListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => NftListRelationFilter)
+  @IsOptional()
+  @Field(() => NftListRelationFilter, {
+    nullable: true,
+  })
+  nfts?: NftListRelationFilter;
 }
 export { CollectionWhereInput };

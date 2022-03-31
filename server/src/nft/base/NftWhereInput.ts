@@ -11,14 +11,27 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { ContractWhereUniqueInput } from "../../contract/base/ContractWhereUniqueInput";
+import { CollectionWhereUniqueInput } from "../../collection/base/CollectionWhereUniqueInput";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
+import { ContractWhereUniqueInput } from "../../contract/base/ContractWhereUniqueInput";
 import { StringFilter } from "../../util/StringFilter";
 import { MetadatumWhereUniqueInput } from "../../metadatum/base/MetadatumWhereUniqueInput";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 @InputType()
 class NftWhereInput {
+  @ApiProperty({
+    required: false,
+    type: () => CollectionWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => CollectionWhereUniqueInput)
+  @IsOptional()
+  @Field(() => CollectionWhereUniqueInput, {
+    nullable: true,
+  })
+  collection?: CollectionWhereUniqueInput;
+
   @ApiProperty({
     required: false,
     type: () => ContractWhereUniqueInput,

@@ -25,7 +25,8 @@ import { DeleteCollectionArgs } from "./DeleteCollectionArgs";
 import { CollectionFindManyArgs } from "./CollectionFindManyArgs";
 import { CollectionFindUniqueArgs } from "./CollectionFindUniqueArgs";
 import { Collection } from "./Collection";
-import { Contract } from "../../contract/base/Contract";
+import { NftFindManyArgs } from "../../nft/base/NftFindManyArgs";
+import { Nft } from "../../nft/base/Nft";
 import { CollectionService } from "../collection.service";
 
 @graphql.Resolver(() => Collection)
@@ -132,15 +133,7 @@ export class CollectionResolverBase {
     // @ts-ignore
     return await this.service.create({
       ...args,
-      data: {
-        ...args.data,
-
-        contract: args.data.contract
-          ? {
-              connect: args.data.contract,
-            }
-          : undefined,
-      },
+      data: args.data,
     });
   }
 
@@ -179,15 +172,7 @@ export class CollectionResolverBase {
       // @ts-ignore
       return await this.service.update({
         ...args,
-        data: {
-          ...args.data,
-
-          contract: args.data.contract
-            ? {
-                connect: args.data.contract,
-              }
-            : undefined,
-        },
+        data: args.data,
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -221,27 +206,29 @@ export class CollectionResolverBase {
     }
   }
 
-  @graphql.ResolveField(() => Contract, { nullable: true })
+  @graphql.ResolveField(() => [Nft])
   @nestAccessControl.UseRoles({
     resource: "Collection",
     action: "read",
     possession: "any",
   })
-  async contract(
+  async nfts(
     @graphql.Parent() parent: Collection,
+    @graphql.Args() args: NftFindManyArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
-  ): Promise<Contract | null> {
+  ): Promise<Nft[]> {
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "read",
       possession: "any",
-      resource: "Contract",
+      resource: "Nft",
     });
-    const result = await this.service.getContract(parent.id);
+    const results = await this.service.findNfts(parent.id, args);
 
-    if (!result) {
-      return null;
+    if (!results) {
+      return [];
     }
-    return permission.filter(result);
+
+    return results.map((result) => permission.filter(result));
   }
 }

@@ -1,6 +1,6 @@
-import { ContractWhereUniqueInput } from "../contract/ContractWhereUniqueInput";
+import { NftUpdateManyWithoutCollectionsInput } from "./NftUpdateManyWithoutCollectionsInput";
 
 export type CollectionUpdateInput = {
-  contract?: ContractWhereUniqueInput | null;
   name?: string;
+  nfts?: NftUpdateManyWithoutCollectionsInput;
 };

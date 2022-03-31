@@ -11,8 +11,7 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, ValidateNested, IsOptional, IsDate } from "class-validator";
-import { Collection } from "../../collection/base/Collection";
+import { IsString, IsDate, IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { Nft } from "../../nft/base/Nft";
 @ObjectType()
@@ -24,15 +23,6 @@ class Contract {
   @IsString()
   @Field(() => String)
   address!: string;
-
-  @ApiProperty({
-    required: false,
-    type: () => [Collection],
-  })
-  @ValidateNested()
-  @Type(() => Collection)
-  @IsOptional()
-  collections?: Array<Collection>;
 
   @ApiProperty({
     required: true,

@@ -503,6 +503,12 @@ export class MetadatumControllerBase {
     const results = await this.service.findNfts(params.id, {
       ...query,
       select: {
+        collection: {
+          select: {
+            id: true,
+          },
+        },
+
         contract: {
           select: {
             id: true,
